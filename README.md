@@ -1,5 +1,5 @@
 # learn-rust
-** languages:[English](README.md),[中文](README_zh.md). **
+languages: [English](README.md), [中文](README_zh.md).
 
 ## License
 learn-rust is licensed under either of
