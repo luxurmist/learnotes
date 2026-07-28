@@ -4,8 +4,6 @@
  * date: 2026-04-01
  */
 
-
-
 // use 引用缩写
 use std::{collections::HashMap, default, string};
 
@@ -13,6 +11,7 @@ use hello_world::mod_name;
 
 // 声明函数 关键字 fn
 // 在每个可执行的Rust程序中，main函数是最先运行的代码。
+
 fn main() {
     println!("Hello, world!");
 
@@ -106,7 +105,7 @@ fn main() {
     // 迭代器区间表示法 a..b ,包含a不包含b，步长1
     // a..=b，a和b都包含
     for n in 1..11 {
-        // 1.。=10 循环10次
+        // 1..=10 循环10次
         // println!({n});
     }
     // iter into_iter iner_mut
@@ -235,17 +234,17 @@ fn main() {
     //     Some(T),
     // }
 
-    // 只匹配一个模式忽略其他模式 if let 
+    // 只匹配一个模式忽略其他模式 if let
     if let IpAddKind::V4(ip) = new_ip {
         // println!("IP V4")
-    }else {
+    } else {
         // println!("IP V6")
     }
 
     // 标准库 集合 collections
     // 向量(vector) 字符串(string) 哈希映射（hash map）
-    
-    // Vector 
+
+    // Vector
     // 单个数据结构存放多个值，内存相连
     // 只能存储相同类型的值
     // 创建空的Vector
@@ -286,7 +285,7 @@ fn main() {
     let s3 = String::from("rld!");
     let s = format!("{s1}-{s2}-{s3}");
     // 取slice
-    let s4 = &s[0..5];
+    let s4 = &s[0..5]; 
     // 遍历字符串
     for c in s.chars() {
         // 返回 char 类型，Unicode 标量值
@@ -314,5 +313,148 @@ fn main() {
     // 遍历
     for (key, value) in &hm {
         // println!("{key}:{value}");
+    }
+
+    // 错误处理
+    // panic!
+
+    // Result 枚举
+    // enum Result<T, E> {
+    //     Ok(T),
+    //     Err(E),
+    // }
+
+    // unwrap()
+    // expect()
+    // 错误传播 ?
+}
+
+// 泛型 Generics
+// 泛型函数
+fn generice_fn<T>(x: T) -> T {
+    x
+}
+// 泛型结构体
+struct GenericeStruct<T, U, V> {
+    x: T,
+    y: U,
+    z: V,
+}
+// 泛型枚举
+enum GenericeEnum<T, U> {
+    One(T),
+    Two(U),
+}
+// 泛型方法
+impl<T, U, V> GenericeStruct<T, U, V> {
+    fn generice_method(&self) -> &T {
+        &self.x
+    }
+}
+// 限制类型的泛型方法
+impl GenericeStruct<i32, i32, i32> {
+    fn gm_i32_double(&self) -> i32 {
+        *&self.x * 2
+    }
+}
+
+
+// 特质 trait
+// 不同类型都具有的行为
+// 定义trait
+trait Quantifiable{
+    // 方法签名
+    fn print_value(&self);
+    // 默认实现
+    fn print_ok() {
+        println!("ok");
+    }
+}
+
+trait SelfRecovery{
+
+}
+
+// 为类型实现trait
+struct HealthPoint {
+    value: u32,
+}
+struct MagicPoint {
+    value: u32,
+}
+
+impl Quantifiable for HealthPoint {
+    fn print_value(&self) {
+        println!("{}", self.value);
+    }
+}
+
+impl Quantifiable for MagicPoint {
+    fn print_value(&self) {
+        println!("{}", self.value);
+    }
+}
+
+// 使用trait作为参数
+fn hp_print(hp: impl Quantifiable) {
+    hp.print_value();
+}
+
+// trait bound
+fn mg_print<T: Quantifiable>(mp: T) {
+    mp.print_value();
+}
+
+// 多个 trait bound
+fn hp_print_recovery<T: Quantifiable + SelfRecovery>(hp: T) {
+    hp.print_value();
+}
+
+// where 写法
+fn hp_mp_print<T, U>(hp: T, mp: U)
+where
+    T: Quantifiable + SelfRecovery,
+    U: Quantifiable + SelfRecovery,
+{
+    hp.print_value();
+    mp.print_value();
+}
+
+// 返回值 使用 trait
+fn create_hp() -> impl Quantifiable {
+    HealthPoint{value: 0}
+}
+
+// 在泛型中为实现特定trait的类型实现特定方法
+struct HP<T>{
+    v: T,
+}
+impl<T: Quantifiable> HP<T> {
+
+}
+
+// 生命周期
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+// 返回值的生命周期与较短的一致
+// 实现结构体方法时，生命周期必须总是在impl关键字之后声明并在结构体名称之后被使用
+
+
+
+// 测试 tests
+pub fn add(left: i32, right: i32) -> i32 {
+    left + right
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add() {
+
+        let result = add(2, 2);
+        assert_eq!(result, 4);
     }
 }
