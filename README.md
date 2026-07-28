@@ -1,7 +1,7 @@
 # LEARNOTES
 
 ## Intro
-Personal learn notes
+Personal learn notes.
 
 ## Item
 1. rust-lang rust语言  
